@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { Inngest } from "inngest";
 import { inngest } from "@/lib/inngest/client";
 
-const INNGEST_API = "http://localhost:8288/v1";
+const INNGEST_API = process.env.NODE_ENV === 'production' 
+  ? 'https://api.inngest.com/v1' 
+  : 'http://localhost:8288/v1';
 
 /** Fetch all runs for a given event ID */
 async function getRuns(eventId: string) {
   const res = await fetch(`${INNGEST_API}/events/${eventId}/runs`, {
     headers: {
-      Authorization: `Bearer ${process.env.INGGEST_SIGNING_KEY}`,
+      Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`,
     },
   });
   if (!res.ok) {
